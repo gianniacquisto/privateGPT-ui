@@ -2,7 +2,7 @@
     <div class="document-list">
         <div v-for="document in documentList" :key="document.id" class="document">
             {{ document.name }}
-            <span class="delete-icon" @click="deleteDocument(document.id)">x</span>
+            <button class="delete-icon" @click="deleteDocument(document.id)">X</button>
         </div>
         <div class="document-buttons">
             <button @click="addDocument">Add Document</button>
@@ -59,7 +59,7 @@ export default {
   
 <style scoped>
 .document-list {
-    width: 40%;
+    width: 30%;
     padding: 20px;
     overflow-y: auto;
     /* Allow vertical scrolling */
@@ -78,12 +78,14 @@ export default {
 }
 
 .delete-icon {
-    position: static;
-    top: 10px;
+    position: sticky;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    top: center;
     right: 10px;
-    border: grey;
     cursor: pointer;
-    color: #ff0000;
+    color: #ca5252;
 }
 
 .document-buttons {
