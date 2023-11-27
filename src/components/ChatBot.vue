@@ -1,11 +1,11 @@
 <template>
     <div class="chat-bot">
-        <div v-for="message in chatMessages" :key="message.id" class="message"
+        <div v-for="message in chatMessages" :key="message.id"
             :class="{ 'user-message': message.sender === 'User', 'bot-message': message.sender === 'Bot' }">
             {{ message.sender }}: {{ message.text }}
         </div>
         <div class="message-input">
-            <input v-model="newMessage" />
+            <input v-model="newMessage" @keyup.enter="sendMessage" />
             <button @click="sendMessage">Send Message</button>
         </div>
     </div>
@@ -65,33 +65,35 @@ export default {
 };
 </script>
   
- 
 <style scoped>
 .chat-bot {
     width: 70%;
     border-right: 1px solid #ccc;
     padding: 20px;
-    overflow-y: scroll;
+    overflow-y: auto;
     /* Allow vertical scrolling */
-    height: 400px;
-    /* Set a fixed height or adjust as needed */
+    height: 78vh;
+    /* Set to 100% of the viewport height */
     display: flex;
     flex-direction: column;
 }
 
-.message {
+.user-message {
+    align-self: flex-end;
+    /* Align user messages to the right */
+    background-color: #d3e0dc;
     margin-bottom: 10px;
     padding: 8px;
     border-radius: 5px;
 }
 
-.user-message {
-    background-color: #d3e0dc;
-}
-
 .bot-message {
+    align-self: flex-start;
+    /* Align bot messages to the left */
     background-color: #e3e3e3;
-    text-align: right;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
 }
 
 .message-input {

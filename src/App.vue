@@ -20,5 +20,9 @@ export default {
 <style>
 #app {
   display: flex;
+  height: 80vh;
+  /* 100% of the viewport height */
+  width: 100vw;
+  /* 100% of the viewport width */
 }
 </style>

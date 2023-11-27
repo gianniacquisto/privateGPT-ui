@@ -2,10 +2,10 @@
     <div class="document-list">
         <div v-for="document in documentList" :key="document.id" class="document">
             {{ document.name }}
+            <span class="delete-icon" @click="deleteDocument(document.id)">x</span>
         </div>
         <div class="document-buttons">
             <button @click="addDocument">Add Document</button>
-            <button @click="deleteDocument">Delete Document</button>
         </div>
     </div>
 </template>
@@ -25,13 +25,11 @@ export default {
                 this.documentList.push(newDocument);
             });
         },
-        deleteDocument() {
+        deleteDocument(id) {
             // Assuming you have a function to make the API call to delete a document
             // Replace this with your actual API call
-            this.deleteDocumentAPI().then((deletedDocumentId) => {
-                this.documentList = this.documentList.filter(
-                    (document) => document.id !== deletedDocumentId
-                );
+            this.deleteDocumentAPI(id).then(() => {
+                this.documentList = this.documentList.filter((document) => document.id !== id);
             });
         },
         addDocumentAPI() {
@@ -46,13 +44,13 @@ export default {
                 resolve(newDocument);
             });
         },
-        deleteDocumentAPI() {
+        deleteDocumentAPI(id) {
             // Make API call to delete a document
-            // Return the ID of the deleted document from the API response
+            // Return the response from the API
             return new Promise((resolve) => {
                 // Mock API response for demonstration
-                const deletedDocumentId = this.documentList.length;
-                resolve(deletedDocumentId);
+                console.log(`Deleting document with ID ${id}`);
+                resolve();
             });
         },
     },
@@ -61,21 +59,31 @@ export default {
   
 <style scoped>
 .document-list {
-    width: 30%;
+    width: 40%;
     padding: 20px;
-    overflow-y: scroll;
+    overflow-y: auto;
     /* Allow vertical scrolling */
-    height: 400px;
+    height: 78vh;
     /* Set a fixed height or adjust as needed */
     display: flex;
     flex-direction: column;
 }
 
 .document {
+    position: relative;
     margin-bottom: 10px;
     padding: 8px;
     border-radius: 5px;
     background-color: #e3e3e3;
+}
+
+.delete-icon {
+    position: static;
+    top: 10px;
+    right: 10px;
+    border: grey;
+    cursor: pointer;
+    color: #ff0000;
 }
 
 .document-buttons {
