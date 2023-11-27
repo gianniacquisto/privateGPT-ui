@@ -1,12 +1,14 @@
 <template>
-    <div class="chat-window">
-        <div class="chat-bot">
-            <div v-for="message in chatMessages" :key="message.id"
-                :class="{ 'user-message': message.sender === 'User', 'bot-message': message.sender === 'Bot' }">
+    <div class="chat-window" ref="chatWindow">
+        <div class="chat-bot" ref="chatBot">
+            <div v-for="message in chatMessages" :key="message.id" :class="{
+                'user-message': message.sender === 'User',
+                'bot-message': message.sender === 'Bot'
+            }">
                 {{ message.sender }}: {{ message.text }}
             </div>
         </div>
-        <br>
+        <br />
         <div class="message-input">
             <input v-model="newMessage" @keyup.enter="sendMessage" />
             <button @click="sendMessage">Send Message</button>
@@ -47,11 +49,18 @@ export default {
             };
 
             this.chatMessages.push(botResponseObj);
+
+            // Scroll to the bottom after adding new messages
+            this.$nextTick(() => {
+                this.scrollToBottom();
+            });
         },
+
         callLLMAPI(message) {
             // Make API call to your LLM with the message
             // Update the chatMessages with the response from the LLM
         },
+
         generateRandomResponse() {
             const responses = [
                 "I'm not sure what you mean.",
@@ -63,6 +72,11 @@ export default {
             ];
             const randomIndex = Math.floor(Math.random() * responses.length);
             return responses[randomIndex];
+        },
+
+        scrollToBottom() {
+            // Scroll to the bottom of the chat-bot
+            this.$refs.chatBot.scrollTop = this.$refs.chatBot.scrollHeight;
         },
     },
 };
