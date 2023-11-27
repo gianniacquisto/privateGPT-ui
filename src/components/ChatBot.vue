@@ -1,9 +1,12 @@
 <template>
-    <div class="chat-bot">
-        <div v-for="message in chatMessages" :key="message.id"
-            :class="{ 'user-message': message.sender === 'User', 'bot-message': message.sender === 'Bot' }">
-            {{ message.sender }}: {{ message.text }}
+    <div class="chat-window">
+        <div class="chat-bot">
+            <div v-for="message in chatMessages" :key="message.id"
+                :class="{ 'user-message': message.sender === 'User', 'bot-message': message.sender === 'Bot' }">
+                {{ message.sender }}: {{ message.text }}
+            </div>
         </div>
+        <br>
         <div class="message-input">
             <input v-model="newMessage" @keyup.enter="sendMessage" />
             <button @click="sendMessage">Send Message</button>
@@ -66,7 +69,7 @@ export default {
 </script>
   
 <style scoped>
-.chat-bot {
+.chat-window {
     width: 70%;
     border-right: 1px solid #ccc;
     padding: 20px;
@@ -74,6 +77,13 @@ export default {
     /* Allow vertical scrolling */
     height: 78vh;
     /* Set to 100% of the viewport height */
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-bot {
+    padding: 20px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
 }

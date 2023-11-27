@@ -2,7 +2,7 @@
     <div class="document-list">
         <div v-for="document in documentList" :key="document.id" class="document">
             {{ document.name }}
-            <button class="delete-icon" @click="deleteDocument(document.id)">X</button>
+            <button class="delete-icon" @click="deleteDocument(document.id)">🗑️</button>
         </div>
         <div class="document-buttons">
             <button @click="addDocument">Add Document</button>
@@ -11,6 +11,8 @@
 </template>
   
 <script>
+
+
 export default {
     data() {
         return {
@@ -75,15 +77,17 @@ export default {
     padding: 8px;
     border-radius: 5px;
     background-color: #e3e3e3;
+    display: flex;
+    justify-content: space-between;
+    /* Align items in a row with space between them */
+    align-items: center;
+    /* Center items vertically */
 }
 
 .delete-icon {
     position: sticky;
-    padding: 10px;
     padding-left: 20px;
     padding-right: 20px;
-    top: center;
-    right: 10px;
     cursor: pointer;
     color: #ca5252;
 }
