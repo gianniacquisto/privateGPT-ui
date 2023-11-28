@@ -32,7 +32,7 @@ export default {
 }
 
 .title-banner {
-  background-color: #253140;
+  background-color: mediumpurple;
   color: white;
   padding: 20px;
   text-align: center;

@@ -1,5 +1,8 @@
 <template>
     <div class="document-window">
+        <div>
+            <h3>Ingested Documents</h3>
+        </div>
         <div class="document-list">
             <div v-for="document in documentList" :key="document.id" class="document">
                 {{ document.name }}
@@ -59,7 +62,7 @@ export default {
 <style scoped>
 .document-window {
     width: 30%;
-    padding: 20px;
+    padding: 10px;
     overflow-y: auto;
     height: 70vh;
     display: flex;
@@ -67,7 +70,7 @@ export default {
 }
 
 .document-list {
-    padding: 20px;
+    padding: 10px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
