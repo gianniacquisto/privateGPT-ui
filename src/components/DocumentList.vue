@@ -1,9 +1,12 @@
 <template>
-    <div class="document-list">
-        <div v-for="document in documentList" :key="document.id" class="document">
-            {{ document.name }}
-            <button class="delete-icon" @click="deleteDocument(document.id)">🗑️</button>
+    <div class="document-window">
+        <div class="document-list">
+            <div v-for="document in documentList" :key="document.id" class="document">
+                {{ document.name }}
+                <button class="delete-icon" @click="deleteDocument(document.id)">🗑️</button>
+            </div>
         </div>
+        <br>
         <div class="document-buttons">
             <button @click="addDocument">Add Document</button>
         </div>
@@ -60,13 +63,18 @@ export default {
 </script>
   
 <style scoped>
-.document-list {
+.document-window {
     width: 30%;
     padding: 20px;
     overflow-y: auto;
-    /* Allow vertical scrolling */
     height: 78vh;
-    /* Set a fixed height or adjust as needed */
+    display: flex;
+    flex-direction: column;
+}
+
+.document-list {
+    padding: 20px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
 }
@@ -79,9 +87,7 @@ export default {
     background-color: #e3e3e3;
     display: flex;
     justify-content: space-between;
-    /* Align items in a row with space between them */
     align-items: center;
-    /* Center items vertically */
 }
 
 .delete-icon {
