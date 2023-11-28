@@ -33,14 +33,12 @@ export default {
                 text: userMessage,
             };
 
-            // Assuming you have a function to make the API call and handle the response
-            // Replace this with your actual API call
+            // TODO
             this.callLLMAPI(userMessage);
 
             this.chatMessages.push(userMessageObj);
             this.newMessage = ""; // Clear the input after sending
 
-            // Simulate a random response from the bot
             const botResponse = this.generateRandomResponse();
             const botResponseObj = {
                 id: this.chatMessages.length + 1,
@@ -50,15 +48,13 @@ export default {
 
             this.chatMessages.push(botResponseObj);
 
-            // Scroll to the bottom after adding new messages
             this.$nextTick(() => {
                 this.scrollToBottom();
             });
         },
 
         callLLMAPI(message) {
-            // Make API call to your LLM with the message
-            // Update the chatMessages with the response from the LLM
+            // TODO
         },
 
         generateRandomResponse() {
@@ -75,7 +71,6 @@ export default {
         },
 
         scrollToBottom() {
-            // Scroll to the bottom of the chat-bot
             this.$refs.chatBot.scrollTop = this.$refs.chatBot.scrollHeight;
         },
     },

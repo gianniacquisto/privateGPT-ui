@@ -24,24 +24,20 @@ export default {
     },
     methods: {
         addDocument() {
-            // Assuming you have a function to make the API call to add a document
-            // Replace this with your actual API call
+            // TODO
             this.addDocumentAPI().then((newDocument) => {
                 this.documentList.push(newDocument);
             });
         },
         deleteDocument(id) {
-            // Assuming you have a function to make the API call to delete a document
-            // Replace this with your actual API call
+            // TODO
             this.deleteDocumentAPI(id).then(() => {
                 this.documentList = this.documentList.filter((document) => document.id !== id);
             });
         },
         addDocumentAPI() {
-            // Make API call to add a document
-            // Return the new document object from the API response
+            // TODO
             return new Promise((resolve) => {
-                // Mock API response for demonstration
                 const newDocument = {
                     id: this.documentList.length + 1,
                     name: `Document ${this.documentList.length + 1}`,
@@ -50,10 +46,8 @@ export default {
             });
         },
         deleteDocumentAPI(id) {
-            // Make API call to delete a document
-            // Return the response from the API
+            // TODO
             return new Promise((resolve) => {
-                // Mock API response for demonstration
                 console.log(`Deleting document with ID ${id}`);
                 resolve();
             });
@@ -100,7 +94,6 @@ export default {
 
 .document-buttons {
     margin-top: auto;
-    /* Push the buttons to the bottom */
 }
 </style>
   
