@@ -106,6 +106,7 @@ export default {
     margin-bottom: 10px;
     padding: 8px;
     border-radius: 5px;
+    word-wrap: normal;
 }
 
 .bot-message {
@@ -114,6 +115,7 @@ export default {
     margin-bottom: 10px;
     padding: 8px;
     border-radius: 5px;
+    word-wrap: normal;
 }
 
 .message-input {
