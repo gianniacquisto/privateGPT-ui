@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <ChatBot />
     <DocumentList />
+    <ChatBot />
   </div>
 </template>
 

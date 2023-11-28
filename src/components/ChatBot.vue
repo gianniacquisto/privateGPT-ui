@@ -85,7 +85,7 @@ export default {
 <style scoped>
 .chat-window {
     width: 70%;
-    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
     padding: 20px;
     overflow-y: auto;
     /* Allow vertical scrolling */
