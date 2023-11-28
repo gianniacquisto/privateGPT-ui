@@ -67,7 +67,7 @@ export default {
     width: 30%;
     padding: 20px;
     overflow-y: auto;
-    height: 78vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
 }

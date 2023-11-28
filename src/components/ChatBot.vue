@@ -10,7 +10,7 @@
         </div>
         <br />
         <div class="message-input">
-            <input v-model="newMessage" @keyup.enter="sendMessage" />
+            <input class="message-input-textbox" v-model="newMessage" @keyup.enter="sendMessage" />
             <button @click="sendMessage">Send Message</button>
         </div>
     </div>
@@ -88,9 +88,7 @@ export default {
     border-left: 1px solid #ccc;
     padding: 20px;
     overflow-y: auto;
-    /* Allow vertical scrolling */
-    height: 78vh;
-    /* Set to 100% of the viewport height */
+    height: 70vh;
     display: flex;
     flex-direction: column;
 }
@@ -104,7 +102,6 @@ export default {
 
 .user-message {
     align-self: flex-end;
-    /* Align user messages to the right */
     background-color: #d3e0dc;
     margin-bottom: 10px;
     padding: 8px;
@@ -113,7 +110,6 @@ export default {
 
 .bot-message {
     align-self: flex-start;
-    /* Align bot messages to the left */
     background-color: #e3e3e3;
     margin-bottom: 10px;
     padding: 8px;
@@ -122,9 +118,13 @@ export default {
 
 .message-input {
     margin-top: auto;
-    /* Push the input and button to the bottom */
     display: flex;
     align-items: center;
+}
+
+.message-input-textbox {
+    border-radius: 5px;
+    padding: 8px;
 }
 
 .message-input input {

@@ -1,7 +1,13 @@
 <template>
   <div id="app">
-    <DocumentList />
-    <ChatBot />
+    <div class="title-banner">
+      <h1>Private GPT</h1>
+    </div>
+    <br>
+    <div class="content-container">
+      <DocumentList />
+      <ChatBot />
+    </div>
   </div>
 </template>
 
@@ -20,9 +26,26 @@ export default {
 <style>
 #app {
   display: flex;
-  height: 80vh;
-  /* 100% of the viewport height */
+  padding: 10px;
   width: 100vw;
-  /* 100% of the viewport width */
+  flex-direction: column;
+}
+
+.title-banner {
+  background-color: #253140;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.title-banner h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.content-container {
+  display: flex;
+  flex: 1;
 }
 </style>
