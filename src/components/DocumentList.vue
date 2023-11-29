@@ -12,7 +12,8 @@
         </div>
         <br>
         <div class="document-buttons">
-            <button @click="addDocument">Add Document</button>
+            <button @click="openFileSelector">Add File(s)</button>
+            <input ref="fileInput" type="file" style="display: none" multiple @change="addFile">
         </div>
     </div>
 </template>
@@ -47,11 +48,30 @@ export default {
                     console.error('Error fetching data:', error);
                 });
         },
-        addDocument() {
-            // TODO
-            this.addDocumentAPI().then((newDocument) => {
-                this.documentList.push(newDocument);
-            });
+        openFileSelector() {
+            // Trigger click on the hidden file input
+            this.$refs.fileInput.click();
+        },
+        addFile(event) {
+            const selectedFiles = event.target.files;
+            console.log('Selected files:', selectedFiles);
+
+            const formData = new FormData();
+            for (let i = 0; i < selectedFiles.length; i++) {
+                formData.append('file', selectedFiles[i]);
+            }
+            axios.post('http://localhost:8001/v1/ingest', formData, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+                .then(response => {
+                    console.log("posting formdata", response.data);
+                })
+                .catch(error => {
+                    console.error('Error uploading file:', error);
+                });
         },
         deleteDocument(id) {
             // TODO
