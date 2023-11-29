@@ -1,12 +1,13 @@
 <template>
     <div class="document-window">
         <div>
-            <h3>Ingested Documents</h3>
+            <h3>Ingested Files</h3>
         </div>
+
         <div class="document-list">
-            <div v-for="document in documentList" :key="document.id" class="document">
-                {{ document.name }}
-                <button class="delete-icon" @click="deleteDocument(document.id)">🗑️</button>
+            <div v-for="file in fileList" class="document">
+                {{ file }}
+                <button class="delete-icon" @click="deleteDocument(file)">🗑️</button>
             </div>
         </div>
         <br>
@@ -18,14 +19,34 @@
   
 <script>
 
+import axios from 'axios'
 
 export default {
     data() {
         return {
+            fileList: [],
             documentList: [],
         };
     },
+    mounted() {
+        this.fetchData()
+    },
     methods: {
+        fetchData() {
+            axios.get('http://localhost:8001/v1/ingest/list')
+                .then(response => {
+                    const proxyDocumentList = new Proxy(response.data.data, {
+                        get(target, prop, receiver) {
+                            return Reflect.get(target, prop, receiver)
+                        },
+                    })
+                    this.documentList = proxyDocumentList
+                    this.fileList = [...new Set(proxyDocumentList.map(x => x.doc_metadata.file_name))]
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        },
         addDocument() {
             // TODO
             this.addDocumentAPI().then((newDocument) => {
