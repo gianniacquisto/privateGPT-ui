@@ -7,7 +7,7 @@
         <div class="document-list">
             <div v-for="file in fileList" class="document">
                 {{ file }}
-                <button class="delete-icon" @click="deleteDocument(file)">🗑️</button>
+                <button class="delete-icon" @click="deleteFile(file)">🗑️</button>
             </div>
         </div>
         <br>
@@ -42,6 +42,7 @@ export default {
                         },
                     })
                     this.documentList = proxyDocumentList
+                    console.log(proxyDocumentList);
                     this.fileList = [...new Set(proxyDocumentList.map(x => x.doc_metadata.file_name))]
                 })
                 .catch(error => {
@@ -68,34 +69,33 @@ export default {
             })
                 .then(response => {
                     console.log("posting formdata", response.data);
+                    this.fetchData()
                 })
                 .catch(error => {
                     console.error('Error uploading file:', error);
                 });
         },
-        deleteDocument(id) {
-            // TODO
-            this.deleteDocumentAPI(id).then(() => {
-                this.documentList = this.documentList.filter((document) => document.id !== id);
-            });
-        },
-        addDocumentAPI() {
-            // TODO
-            return new Promise((resolve) => {
-                const newDocument = {
-                    id: this.documentList.length + 1,
-                    name: `Document ${this.documentList.length + 1}`,
-                };
-                resolve(newDocument);
-            });
-        },
-        deleteDocumentAPI(id) {
-            // TODO
-            return new Promise((resolve) => {
-                console.log(`Deleting document with ID ${id}`);
-                resolve();
-            });
-        },
+        deleteFile(file) {
+            const docsToDelete = this.documentList.filter((document) => document.doc_metadata.file_name == file)
+            const docIdsToDelete = docsToDelete.map(x => x.doc_id)
+            console.log("docIdsToDelete", docIdsToDelete);
+            for (let i = 0; i < docIdsToDelete.length; i++) {
+
+                axios.delete(`http://localhost:8001/v1/ingest/${docIdsToDelete[i]}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                })
+                    .then(response => {
+                        console.log(`Deleted document with id: ${docIdsToDelete[i]}, progress: ${i}/${docIdsToDelete.length}`);
+                        // this.fetchData() FIXME: this very spammy for now but deletion works - perhaps look into Promise.all
+                    })
+                    .catch(error => {
+                        console.error('Error deleting document:', error);
+                    });
+
+            }
+        }
     },
 };
 </script>
