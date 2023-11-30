@@ -1,11 +1,11 @@
 <template>
     <div class="chat-window" ref="chatWindow">
         <div class="chat-bot" ref="chatBot">
-            <div v-for="message in chatMessages" :key="message.id" :class="{
-                'user-message': message.sender === 'User',
-                'bot-message': message.sender === 'Bot'
+            <div v-for="message in messages" :class="{
+                'user-message': message.role === 'user',
+                'bot-message': message.role === 'assistant'
             }">
-                {{ message.sender }}: {{ message.text }}
+                {{ message.role }}: {{ message.content }}
             </div>
         </div>
         <br />
@@ -17,44 +17,57 @@
 </template>
   
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
-            chatMessages: [],
+            // chatMessages: [],
             newMessage: "",
+            messages: [],
+            currentBotResponse: ""
         };
     },
     methods: {
         sendMessage() {
             const userMessage = this.newMessage;
-            const userMessageObj = {
-                id: this.chatMessages.length + 1,
-                sender: "User",
-                text: userMessage,
+            const userMessageObj = { role: "user", content: userMessage }
+
+            const postData = {
+                // context_filter: {doc_ids: ["docId1", "docId2"]}, TODO enable via button
+                include_sources: false, // TODO enable via button
+                messages: [...this.messages, userMessageObj],
+                stream: false, // TODO enable via button
+                use_context: true // TODO enable via button
             };
 
-            // TODO
-            this.callLLMAPI(userMessage);
+            axios.post('http://localhost:8001/v1/chat/completions', postData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            })
+                .then(response => {
+                    console.log(response.data);
 
-            this.chatMessages.push(userMessageObj);
-            this.newMessage = ""; // Clear the input after sending
+                    this.messages.push(userMessageObj);
+                    this.newMessage = ""; // Clear the input after sending
 
-            const botResponse = this.generateRandomResponse();
-            const botResponseObj = {
-                id: this.chatMessages.length + 1,
-                sender: "Bot",
-                text: botResponse,
-            };
 
-            this.chatMessages.push(botResponseObj);
+                    this.currentBotResponse = response.data.choices[0].message
+                    this.messages.push(this.currentBotResponse);
+                    // this.chatMessages.push(this.currentBotResponse.content);
 
-            this.$nextTick(() => {
-                this.scrollToBottom();
-            });
-        },
 
-        callLLMAPI(message) {
-            // TODO
+                    this.$nextTick(() => {
+                        this.scrollToBottom();
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+
         },
 
         generateRandomResponse() {
