@@ -5,10 +5,13 @@
                 'user-message': message.role === 'user',
                 'bot-message': message.role === 'assistant'
             }">
-                {{ message.role }}: {{ message.content }}
+                {{ message.role }}:
+                <div v-for="messageText in splitMessage(message.content)">
+                    <div v-if="isCode(messageText)" v-html="formatCode(messageText)"></div>
+                    <div v-else> {{ messageText }} </div>
+                </div>
             </div>
         </div>
-        <br />
         <div class="message-input">
             <input class="message-input-textbox" v-model="newMessage" @keyup.enter="sendMessage" />
             <button @click="sendMessage">Send Message</button>
@@ -18,12 +21,13 @@
   
 <script>
 import axios from 'axios';
-
+import 'prismjs';
+import 'prismjs/themes/prism.css';
+import Prism from 'prismjs';
 export default {
     data() {
         return {
-            // chatMessages: [],
-            newMessage: "",
+            newMessage: "can you generate me some code snippets in different languages",
             messages: [],
             currentBotResponse: ""
         };
@@ -69,20 +73,39 @@ export default {
 
 
         },
+        splitMessage(text) {
+            const splitted = text.split("```")
+            // console.log(splitted);
+            return splitted
 
-        generateRandomResponse() {
-            const responses = [
-                "I'm not sure what you mean.",
-                "That's interesting!",
-                "Tell me more about that.",
-                "I'm still learning!",
-                "Could you rephrase that?",
-                "I don't have the answer to that question.",
-            ];
-            const randomIndex = Math.floor(Math.random() * responses.length);
-            return responses[randomIndex];
         },
+        isCode(text) {
+            // Prism.languages[text.split(" ")[0]]
+            const splitText = text.split("\n")[0]
+            // console.log(splitText);
+            console.log(text); //lovely logging
+            return splitText === "javascript"
+        },
+        formatCode(code) {
+            // Extract language from the code content
+            let splitCode = code.split(' ')
+            console.log("split", splitCode);
+            const language = splitCode[0];
 
+            // const cleanedCode = codeString.replace(/^javascript\n|`$/g, '');
+
+
+            splitCode.shift()
+            const restOfCode = splitCode.toString()
+            const trimmed = restOfCode.substring(language.length + 1)
+            console.log("rest", restOfCode);
+            console.log("language: ", language);
+
+            // Use Prism.js to highlight and format the code
+            const highlightedCode = Prism.highlight(restOfCode, Prism.languages[language], language);
+            console.log("highlightedCode: ", highlightedCode);
+            return `<pre class="language-${language}">${highlightedCode}</pre>`;
+        },
         scrollToBottom() {
             this.$refs.chatBot.scrollTop = this.$refs.chatBot.scrollHeight;
         },
@@ -115,6 +138,7 @@ export default {
     padding: 8px;
     border-radius: 5px;
     word-wrap: normal;
+    text-align: left;
 }
 
 .bot-message {
@@ -124,6 +148,7 @@ export default {
     padding: 8px;
     border-radius: 5px;
     word-wrap: normal;
+    text-align: left;
 }
 
 .message-input {
