@@ -27,7 +27,7 @@ export default {
 #app {
   display: flex;
   padding: 10px;
-  width: 100vw;
+  width: 95vw;
   flex-direction: column;
 }
 

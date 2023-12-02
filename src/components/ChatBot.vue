@@ -92,7 +92,7 @@ export default {
   
 <style scoped>
 .chat-window {
-    width: 70%;
+    width: 75%;
     border-left: 1px solid #ccc;
     padding: 20px;
     overflow-y: auto;
