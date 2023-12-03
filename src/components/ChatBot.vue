@@ -1,5 +1,9 @@
 <template>
     <div class="chat-window" ref="chatWindow">
+        <div>
+            <button @click="toggleIncludeSources" :class="{ 'active': includeSources }">Include Sources</button>
+            <button @click="toggleUseContext" :class="{ 'active': useContext }">Use Context</button>
+        </div>
         <div class="chat-bot" ref="chatBot">
             <div v-for="message in messages" :class="{
                 'user-message': message.role === 'user',
@@ -18,6 +22,8 @@
             <input class="message-input-textbox" v-model="newMessage" @keyup.enter="sendMessage" />
             <button @click="sendMessage">Send Message</button>
         </div>
+
+
     </div>
 </template>
   
@@ -28,22 +34,30 @@ import hljs from 'highlight.js';
 export default {
     data() {
         return {
-            newMessage: "can you generate me some code snippets for hello world in 5 different languages including js",
+            newMessage: "",
             messages: [],
-            currentBotResponse: ""
+            currentBotResponse: "",
+            includeSources: false,
+            useContext: true
         };
     },
     methods: {
+        toggleIncludeSources() {
+            this.includeSources = !this.includeSources
+        },
+        toggleUseContext() {
+            this.useContext = !this.useContext
+        },
         sendMessage() {
             const userMessage = this.newMessage;
             const userMessageObj = { role: "user", content: userMessage }
 
             const postData = {
                 // context_filter: {doc_ids: ["docId1", "docId2"]}, TODO enable via button
-                include_sources: false, // TODO enable via button
+                include_sources: this.includeSources, // TODO show sources
                 messages: [...this.messages, userMessageObj],
                 stream: false, // TODO enable via button
-                use_context: true // TODO enable via button
+                use_context: this.useContext
             };
 
             axios.post('http://localhost:8001/v1/chat/completions', postData, {
@@ -147,6 +161,11 @@ export default {
     padding: 8px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.active {
+    /* border-color: #64ff8b; */
+    background-color: #85f78983;
 }
 </style>
   
