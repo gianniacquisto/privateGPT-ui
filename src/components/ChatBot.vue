@@ -4,6 +4,7 @@
             <button @click="toggleIncludeSources" :class="{ 'active': includeSources }">Include Sources</button>
             <button @click="toggleUseContext" :class="{ 'active': useContext }">Use Context</button>
         </div>
+        <br>
         <div class="chat-bot" ref="chatBot">
             <div v-for="message in messages" :class="{
                 'user-message': message.role === 'user',
