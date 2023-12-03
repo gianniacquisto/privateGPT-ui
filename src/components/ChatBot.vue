@@ -5,6 +5,8 @@
             <button @click="toggleUseContext" :class="{ 'active': useContext }">Use Context</button>
         </div>
         <br>
+        <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
+
         <div class="chat-bot" ref="chatBot">
             <div v-for="message in messages" :class="{
                 'user-message': message.role === 'user',
@@ -42,6 +44,8 @@ export default {
             useContext: true
         };
     },
+    props: ['modelValue'],
+    emits: ['update:modelValue'],
     methods: {
         toggleIncludeSources() {
             this.includeSources = !this.includeSources
@@ -75,6 +79,8 @@ export default {
                     this.currentBotResponse = response.data.choices[0].message
                     this.messages.push(this.currentBotResponse);
 
+                    // Save message history here
+
                     this.$nextTick(() => {
                         this.scrollToBottom();
                     });
@@ -105,6 +111,7 @@ export default {
 .chat-window {
     width: 75%;
     border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
     padding: 20px;
     overflow-y: auto;
     height: 70vh;

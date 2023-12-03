@@ -5,20 +5,28 @@
     </div>
     <br>
     <div class="content-container">
+      <ChatHistory v-model="chatHistory" />
+      <ChatBot v-model="chatHistory" />
       <DocumentList />
-      <ChatBot />
     </div>
   </div>
 </template>
 
 <script>
 import ChatBot from "./components/ChatBot.vue";
+import ChatHistory from "./components/ChatHistory.vue";
 import DocumentList from "./components/DocumentList.vue";
 
 export default {
+  data() {
+    return {
+      chatHistory: "history test"
+    }
+  },
   components: {
     ChatBot,
-    DocumentList,
+    ChatHistory,
+    DocumentList
   },
 };
 </script>
