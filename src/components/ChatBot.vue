@@ -27,7 +27,7 @@ import Prism from 'prismjs';
 export default {
     data() {
         return {
-            newMessage: "can you generate me some code snippets in different languages",
+            newMessage: "can you generate me some code snippets in different languages especially in js",
             messages: [],
             currentBotResponse: ""
         };
@@ -80,29 +80,36 @@ export default {
 
         },
         isCode(text) {
-            // Prism.languages[text.split(" ")[0]]
             const splitText = text.split("\n")[0]
-            // console.log(splitText);
             console.log(text); //lovely logging
             return splitText === "javascript"
         },
         formatCode(code) {
             // Extract language from the code content
-            let splitCode = code.split(' ')
-            console.log("split", splitCode);
-            const language = splitCode[0];
+            // let splitCode = code.split(' ')
+            // console.log("split", splitCode);
+            // const language = splitCode[0];
 
-            // const cleanedCode = codeString.replace(/^javascript\n|`$/g, '');
+            // // const cleanedCode = codeString.replace(/^javascript\n|`$/g, '');
 
 
-            splitCode.shift()
-            const restOfCode = splitCode.toString()
-            const trimmed = restOfCode.substring(language.length + 1)
-            console.log("rest", restOfCode);
-            console.log("language: ", language);
+            // splitCode.shift()
+            // const restOfCode = splitCode.toString()
+            // const trimmed = restOfCode.substring(language.length + 1)
+            // console.log("rest", restOfCode);
+            // console.log("language: ", language);
+
+            let bla = code.split("\n")
+            let language = bla[0]
+            console.log(bla);
+            bla.shift()
+            // console.log(bla);
+            let blabla = bla.join("\n")
+            console.log(blabla);
+
 
             // Use Prism.js to highlight and format the code
-            const highlightedCode = Prism.highlight(restOfCode, Prism.languages[language], language);
+            const highlightedCode = Prism.highlight(blabla, Prism.languages[language], language);
             console.log("highlightedCode: ", highlightedCode);
             return `<pre class="language-${language}">${highlightedCode}</pre>`;
         },
