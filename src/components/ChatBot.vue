@@ -7,7 +7,10 @@
             }">
                 {{ message.role }}:
                 <div v-for="messageText in splitMessage(message.content)">
-                    <div v-if="isCode(messageText)" v-html="formatCode(messageText)"></div>
+                    <!-- <div v-if="isCode(messageText)" v-html="formatCode(messageText)"></div> -->
+                    <div v-if="isCode(messageText)">
+                        <highlightjs autodetect :code="messageText" />
+                    </div>
                     <div v-else> {{ messageText }} </div>
                 </div>
             </div>
@@ -21,18 +24,17 @@
   
 <script>
 import axios from 'axios';
-import 'prismjs';
-import 'prismjs/themes/prism.css';
 import Prism from 'prismjs';
 export default {
     data() {
         return {
-            newMessage: "can you generate me some code snippets in different languages especially in js",
+            newMessage: "can you generate me some code snippets for hello world in 5 different languages including js",
             messages: [],
             currentBotResponse: ""
         };
     },
     methods: {
+        // loadLangs() { loadLanguages() },
         sendMessage() {
             const userMessage = this.newMessage;
             const userMessageObj = { role: "user", content: userMessage }
@@ -82,36 +84,13 @@ export default {
         isCode(text) {
             const splitText = text.split("\n")[0]
             console.log(text); //lovely logging
-            return splitText === "javascript"
-        },
-        formatCode(code) {
-            // Extract language from the code content
-            // let splitCode = code.split(' ')
-            // console.log("split", splitCode);
-            // const language = splitCode[0];
-
-            // // const cleanedCode = codeString.replace(/^javascript\n|`$/g, '');
-
-
-            // splitCode.shift()
-            // const restOfCode = splitCode.toString()
-            // const trimmed = restOfCode.substring(language.length + 1)
-            // console.log("rest", restOfCode);
-            // console.log("language: ", language);
-
-            let bla = code.split("\n")
-            let language = bla[0]
-            console.log(bla);
-            bla.shift()
-            // console.log(bla);
-            let blabla = bla.join("\n")
-            console.log(blabla);
-
-
-            // Use Prism.js to highlight and format the code
-            const highlightedCode = Prism.highlight(blabla, Prism.languages[language], language);
-            console.log("highlightedCode: ", highlightedCode);
-            return `<pre class="language-${language}">${highlightedCode}</pre>`;
+            // return splitText === "javascript"
+            console.log("language:", splitText);
+            // loadLanguages([splitText])
+            console.log(Prism.languages);
+            console.log("is a lang: ", Prism.languages[splitText])
+            // console.log(Object.keys(Prism.languages).filter(id => typeof Prism.languages[id] === "object"));
+            return Prism.languages[splitText]
         },
         scrollToBottom() {
             this.$refs.chatBot.scrollTop = this.$refs.chatBot.scrollHeight;
