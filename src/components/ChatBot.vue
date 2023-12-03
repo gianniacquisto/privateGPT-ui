@@ -7,7 +7,6 @@
             }">
                 {{ message.role }}:
                 <div v-for="messageText in splitMessage(message.content)">
-                    <!-- <div v-if="isCode(messageText)" v-html="formatCode(messageText)"></div> -->
                     <div v-if="isCode(messageText)">
                         <highlightjs autodetect :code="messageText" />
                     </div>
@@ -24,7 +23,8 @@
   
 <script>
 import axios from 'axios';
-import Prism from 'prismjs';
+import hljs from 'highlight.js';
+
 export default {
     data() {
         return {
@@ -34,7 +34,6 @@ export default {
         };
     },
     methods: {
-        // loadLangs() { loadLanguages() },
         sendMessage() {
             const userMessage = this.newMessage;
             const userMessageObj = { role: "user", content: userMessage }
@@ -58,12 +57,8 @@ export default {
 
                     this.messages.push(userMessageObj);
                     this.newMessage = ""; // Clear the input after sending
-
-
                     this.currentBotResponse = response.data.choices[0].message
                     this.messages.push(this.currentBotResponse);
-                    // this.chatMessages.push(this.currentBotResponse.content);
-
 
                     this.$nextTick(() => {
                         this.scrollToBottom();
@@ -77,20 +72,12 @@ export default {
         },
         splitMessage(text) {
             const splitted = text.split("```")
-            // console.log(splitted);
             return splitted
-
         },
         isCode(text) {
             const splitText = text.split("\n")[0]
-            console.log(text); //lovely logging
-            // return splitText === "javascript"
-            console.log("language:", splitText);
-            // loadLanguages([splitText])
-            console.log(Prism.languages);
-            console.log("is a lang: ", Prism.languages[splitText])
-            // console.log(Object.keys(Prism.languages).filter(id => typeof Prism.languages[id] === "object"));
-            return Prism.languages[splitText]
+            const langSupported = hljs.getLanguage(splitText);
+            return langSupported
         },
         scrollToBottom() {
             this.$refs.chatBot.scrollTop = this.$refs.chatBot.scrollHeight;
