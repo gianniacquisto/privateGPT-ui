@@ -87,7 +87,7 @@ export default {
                     },
                 })
                     .then(response => {
-                        console.log(`Deleted document with id: ${docIdsToDelete[i]}, progress: ${i}/${docIdsToDelete.length}`);
+                        console.log(`Deleted document with id: ${docIdsToDelete[i]}, progress: ${i + 1}/${docIdsToDelete.length}`);
                         // this.fetchData() FIXME: this very spammy for now but deletion works - perhaps look into Promise.all
                     })
                     .catch(error => {
