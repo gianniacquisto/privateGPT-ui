@@ -5,7 +5,6 @@
             <button @click="toggleUseContext" :class="{ 'active': useContext }">Use Context</button>
         </div>
         <br>
-        <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
 
         <div class="chat-bot" ref="chatBot">
             <div v-for="message in messages" :class="{
@@ -37,6 +36,7 @@ import hljs from 'highlight.js';
 export default {
     data() {
         return {
+            activeChat: {},
             newMessage: "",
             messages: [],
             currentBotResponse: "",
@@ -44,9 +44,18 @@ export default {
             useContext: true
         };
     },
-    props: ['modelValue'],
-    emits: ['update:modelValue'],
+    mounted() {
+        this.generateChatId()
+    },
+    props: ['history'],
+    emits: ['update:history'],
     methods: {
+        generateChatId() {
+            const chatId = crypto.randomUUID();
+            this.chatId = chatId
+            console.log("Chat Id: ", this.chatId);
+            return
+        },
         toggleIncludeSources() {
             this.includeSources = !this.includeSources
         },
@@ -81,6 +90,8 @@ export default {
 
                     // Save message history here
 
+                    this.history.push(userMessageObj.content)
+                    // -------------------------
                     this.$nextTick(() => {
                         this.scrollToBottom();
                     });

@@ -3,7 +3,7 @@
         <div>
             <h3>Chat History</h3>
         </div>
-        <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
+        <div v-for="chat in history" class="document"> {{ chat.name }} </div>
     </div>
 </template>
   
@@ -11,8 +11,8 @@
 
 
 export default {
-    props: ['modelValue'],
-    emits: ['update:modelValue']
+    props: ['history'],
+    emits: ['update:history']
 };
 </script>
   
@@ -24,5 +24,16 @@ export default {
     height: 70vh;
     display: flex;
     flex-direction: column;
+}
+
+.document {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #e3e3e3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 </style>

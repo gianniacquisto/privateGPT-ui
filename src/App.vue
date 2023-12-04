@@ -5,8 +5,8 @@
     </div>
     <br>
     <div class="content-container">
-      <ChatHistory v-model="chatHistory" />
-      <ChatBot v-model="chatHistory" />
+      <ChatHistory v-model:history="chatHistory" />
+      <ChatBot v-model:history="chatHistory" />
       <DocumentList />
     </div>
   </div>
@@ -20,7 +20,7 @@ import DocumentList from "./components/DocumentList.vue";
 export default {
   data() {
     return {
-      chatHistory: "history test"
+      chatHistory: [{ id: "1", name: "history test 1", messages: [] }]
     }
   },
   components: {
