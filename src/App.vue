@@ -6,7 +6,7 @@
     <br>
     <div class="content-container">
       <ChatHistory v-model:chatsMetadata="chatsMetadata" @chatSelected="activateSelectedChat" />
-      <ChatBot v-model:activeChat="activeChat" />
+      <ChatBot v-model="activeChat" />
       <DocumentList />
     </div>
   </div>
@@ -22,21 +22,37 @@ export default {
     return {
       chatHistory: [{ id: "1", name: "history test 1", lastUpdated: "1", messages: [] }],
       activeChatId: "",
-      activeChat: {}
+      // activeChat: {}
     }
   },
   computed: {
     chatsMetadata() {
       if (this.chatHistory) {
-        const metadata = this.chatHistory.map(chat => { chat.id, chat.name, chat.lastUpdated })
+        const metadata = this.chatHistory.map(chat => {
+          return { id: chat.id, name: chat.name, lastUpdated: chat.lastUpdated }
+        })
+        console.log("metadata", metadata);
         return metadata
       }
       else return []
+    },
+    activeChat: {
+      value: {
+        get() {
+          return this.chatHistory.filter(x => x.id === this.activeChatId)
+
+        },
+        set(value) {
+
+        }
+      }
     }
   },
   methods: {
     activateSelectedChat(chatId) {
       this.activeChatId = chatId
+      console.log(`Activated chat with id: ${chatId}`)
+      console.log("Active chat: ", this.activeChat)
     }
   },
   components: {

@@ -3,10 +3,13 @@
         <div>
             <button @click="toggleIncludeSources" :class="{ 'active': includeSources }">Include Sources</button>
             <button @click="toggleUseContext" :class="{ 'active': useContext }">Use Context</button>
+            <span>{{ activeChat?.id }}</span>
         </div>
         <br>
 
+
         <div class="chat-bot" ref="chatBot">
+
             <div v-for="message in messages" :class="{
                 'user-message': message.role === 'user',
                 'bot-message': message.role === 'assistant'
@@ -20,6 +23,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="message-input">
             <input class="message-input-textbox" v-model="newMessage" @keyup.enter="sendMessage" />
             <button @click="sendMessage">Send Message</button>
@@ -36,7 +41,8 @@ import hljs from 'highlight.js';
 export default {
     data() {
         return {
-            // activeChat: {},
+            chatId: "",
+            activeChat: {},
             newMessage: "",
             messages: [],
             currentBotResponse: "",
@@ -46,15 +52,18 @@ export default {
     },
     mounted() {
         this.generateChatId()
+        this.generateActiveChat(this.chatId)
     },
-    props: ['activeChat'],
-    emits: ['update:activeChat'],
+    props: ['modelValue'],
+    emits: ['update:modelValue'],
     methods: {
         generateChatId() {
-            const chatId = crypto.randomUUID();
+            const chatId = crypto.randomUUID()
             this.chatId = chatId
-            console.log("Chat Id: ", this.chatId);
-            return
+            console.log("Chat Id: ", this.chatId)
+        },
+        generateActiveChat() {
+            this.activeChat = { id: this.chatId, name: "", lastUpdated: "", messages: [] }
         },
         toggleIncludeSources() {
             this.includeSources = !this.includeSources
@@ -83,21 +92,37 @@ export default {
                 .then(response => {
                     console.log(response.data);
 
-                    this.messages.push(userMessageObj);
-                    this.newMessage = ""; // Clear the input after sending
+                    this.messages.push(userMessageObj)
+                    this.newMessage = "" // Clear the input after sending
                     this.currentBotResponse = response.data.choices[0].message
-                    this.messages.push(this.currentBotResponse);
+                    this.messages.push(this.currentBotResponse)
+
+
+                    console.log("props", this.$props);
 
                     // Save message history here
+                    if (this.chatId === this.$props.modelValue?.id) {
+                        const updatedChat = this.$props.activeChat
+                        updatedChat.messages = this.messages
+                        this.$emit("update:modelValue", updatedChat)
+                    }
+                    else {
+                        const newChat = { id: this.chatId, name: "bla!", lastUpdated: "yep", messages: this.messages }
+                        console.log("newChat", newChat);
+                        this.$emit("update:modelValue", newChat)
+                    }
 
-                    this.activeChat.messages = this.messages //todo see if this should be computed
+                    // this.activeChat = this.$props.activeChat
+                    // this.activeChat.messages = this.messages
+                    // console.log(this.activeChat);
+                    // this.$emit('update:activeChat', this.activeChat)//todo see if this should be computed
                     // -------------------------
                     this.$nextTick(() => {
-                        this.scrollToBottom();
+                        this.scrollToBottom()
                     });
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error:', error)
                 });
 
 
