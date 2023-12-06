@@ -5,8 +5,8 @@
     </div>
     <br>
     <div class="content-container">
-      <ChatHistory v-model:history="chatHistory" />
-      <ChatBot v-model:history="chatHistory" />
+      <ChatHistory v-model:chatsMetadata="chatsMetadata" @chatSelected="activateSelectedChat" />
+      <ChatBot v-model:activeChat="activeChat" />
       <DocumentList />
     </div>
   </div>
@@ -20,7 +20,23 @@ import DocumentList from "./components/DocumentList.vue";
 export default {
   data() {
     return {
-      chatHistory: [{ id: "1", name: "history test 1", messages: [] }]
+      chatHistory: [{ id: "1", name: "history test 1", lastUpdated: "1", messages: [] }],
+      activeChatId: "",
+      activeChat: {}
+    }
+  },
+  computed: {
+    chatsMetadata() {
+      if (this.chatHistory) {
+        const metadata = this.chatHistory.map(chat => { chat.id, chat.name, chat.lastUpdated })
+        return metadata
+      }
+      else return []
+    }
+  },
+  methods: {
+    activateSelectedChat(chatId) {
+      this.activeChatId = chatId
     }
   },
   components: {

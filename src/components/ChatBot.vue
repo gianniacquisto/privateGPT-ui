@@ -36,7 +36,7 @@ import hljs from 'highlight.js';
 export default {
     data() {
         return {
-            activeChat: {},
+            // activeChat: {},
             newMessage: "",
             messages: [],
             currentBotResponse: "",
@@ -47,8 +47,8 @@ export default {
     mounted() {
         this.generateChatId()
     },
-    props: ['history'],
-    emits: ['update:history'],
+    props: ['activeChat'],
+    emits: ['update:activeChat'],
     methods: {
         generateChatId() {
             const chatId = crypto.randomUUID();
@@ -90,7 +90,7 @@ export default {
 
                     // Save message history here
 
-                    this.history.push(userMessageObj.content)
+                    this.activeChat.messages = this.messages //todo see if this should be computed
                     // -------------------------
                     this.$nextTick(() => {
                         this.scrollToBottom();

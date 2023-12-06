@@ -1,18 +1,26 @@
 <template>
     <div class="document-window">
         <div>
-            <h3>Chat History</h3>
+            <h3>Chats</h3>
         </div>
-        <div v-for="chat in history" class="document"> {{ chat.name }} </div>
+        <div v-for="chat in chatsMetadata" @click="selectChat(chat)" class="document">
+            <div v-if="chat">
+                {{ chat.name }}
+            </div>
+        </div>
     </div>
 </template>
   
 <script>
 
-
 export default {
-    props: ['history'],
-    emits: ['update:history']
+    props: ['chatsMetadata'],
+    // emits: ['update:chatsMetadata'],
+    methods: {
+        selectChat(chat) {
+            this.$emit('chatSelected', chat.id)
+        }
+    }
 };
 </script>
   
