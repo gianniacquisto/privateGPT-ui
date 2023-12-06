@@ -3,14 +3,13 @@
         <div>
             <button @click="toggleIncludeSources" :class="{ 'active': includeSources }">Include Sources</button>
             <button @click="toggleUseContext" :class="{ 'active': useContext }">Use Context</button>
-            <span>{{ activeChat?.id }}</span>
         </div>
         <br>
 
 
-        <div class="chat-bot" ref="chatBot">
+        <div class="chat-bot" ref="chatBot" v-if="activeChat">
 
-            <div v-for="message in messages" :class="{
+            <div v-for="message in activeChat.messages" :class="{
                 'user-message': message.role === 'user',
                 'bot-message': message.role === 'assistant'
             }">
@@ -25,6 +24,7 @@
         </div>
 
 
+
         <div class="message-input">
             <input class="message-input-textbox" v-model="newMessage" @keyup.enter="sendMessage" />
             <button @click="sendMessage">Send Message</button>
@@ -37,33 +37,41 @@
 <script>
 import axios from 'axios';
 import hljs from 'highlight.js';
+import { store } from '../store';
 
 export default {
     data() {
         return {
-            chatId: "",
-            activeChat: {},
+            store,
             newMessage: "",
-            messages: [],
-            currentBotResponse: "",
             includeSources: false,
             useContext: true
         };
     },
     mounted() {
         this.generateChatId()
-        this.generateActiveChat(this.chatId)
     },
-    props: ['modelValue'],
-    emits: ['update:modelValue'],
+    computed: {
+        activeChat() {
+            console.log("bloop", this.store.chats)
+            const bla = this.store.chats.filter(x => {
+                console.log("x", x);
+                console.log("this.store.activeChatId", this.store.activeChatId);
+                return x.id === this.store.activeChatId
+            })
+            console.log("bla", bla);
+            if (bla) {
+
+                return bla[0]
+            }
+            else return {}
+        },
+    },
     methods: {
         generateChatId() {
             const chatId = crypto.randomUUID()
-            this.chatId = chatId
-            console.log("Chat Id: ", this.chatId)
-        },
-        generateActiveChat() {
-            this.activeChat = { id: this.chatId, name: "", lastUpdated: "", messages: [] }
+            this.store.activeChatId = chatId
+            console.log("Generated Chat Id: ", chatId)
         },
         toggleIncludeSources() {
             this.includeSources = !this.includeSources
@@ -74,11 +82,11 @@ export default {
         sendMessage() {
             const userMessage = this.newMessage;
             const userMessageObj = { role: "user", content: userMessage }
-
+            const messages = this.store.chats.filter(x => x.id === this.store.activeChatId).map(x => x.messages)
             const postData = {
                 // context_filter: {doc_ids: ["docId1", "docId2"]}, TODO enable via button
                 include_sources: this.includeSources, // TODO show sources
-                messages: [...this.messages, userMessageObj],
+                messages: [...messages, userMessageObj],
                 stream: false, // TODO enable via button
                 use_context: this.useContext
             };
@@ -91,26 +99,40 @@ export default {
             })
                 .then(response => {
                     console.log(response.data);
+                    const botResponse = response.data.choices[0].message
 
-                    this.messages.push(userMessageObj)
-                    this.newMessage = "" // Clear the input after sending
-                    this.currentBotResponse = response.data.choices[0].message
-                    this.messages.push(this.currentBotResponse)
+                    const storeChats = this.store.chats
+                    const storeChatIds = storeChats.map(x => x.id)
+                    console.log("store chat ids: ", storeChatIds);
+                    const currentChatExists = storeChatIds.includes(this.store.activeChatId)
+                    console.log("current chat exists: ", currentChatExists);
 
-
-                    console.log("props", this.$props);
 
                     // Save message history here
-                    if (this.chatId === this.$props.modelValue?.id) {
-                        const updatedChat = this.$props.activeChat
-                        updatedChat.messages = this.messages
-                        this.$emit("update:modelValue", updatedChat)
+                    if (currentChatExists) {
+                        const activeChat = storeChats.filter(x => { x.id === this.store.activeChatId })[0]
+                        activeChat.messages.push(userMessageObj)
+                        activeChat.messages.push(botResponse) // push bot response
                     }
                     else {
-                        const newChat = { id: this.chatId, name: "bla!", lastUpdated: "yep", messages: this.messages }
-                        console.log("newChat", newChat);
-                        this.$emit("update:modelValue", newChat)
+                        const newChat = { id: this.store.activeChatId, name: "new name", lastUpdated: "bla", messages: [userMessageObj, botResponse] }
+                        storeChats.push(newChat)
+                        console.log("adding new chat", storeChats);
                     }
+
+                    this.newMessage = "" // Clear the input after sending
+
+
+                    // if (this.chatId === this.$props.modelValue?.id) {
+                    //     const updatedChat = this.$props.activeChat
+                    //     updatedChat.messages = this.messages
+                    //     this.$emit("update:modelValue", updatedChat)
+                    // }
+                    // else {
+                    //     const newChat = { id: this.chatId, name: "bla!", lastUpdated: "yep", messages: this.messages }
+                    //     console.log("newChat", newChat);
+                    //     this.$emit("update:modelValue", newChat)
+                    // }
 
                     // this.activeChat = this.$props.activeChat
                     // this.activeChat.messages = this.messages

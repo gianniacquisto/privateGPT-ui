@@ -3,7 +3,7 @@
         <div>
             <h3>Chats</h3>
         </div>
-        <div v-for="chat in chatsMetadata" @click="selectChat(chat)" class="document">
+        <div v-for="chat in this.store.chats" @click="selectChat(chat)" class="document">
             <div v-if="chat">
                 {{ chat.name }}
             </div>
@@ -12,10 +12,14 @@
 </template>
   
 <script>
+import { store } from '../store';
 
 export default {
-    props: ['chatsMetadata'],
-    // emits: ['update:chatsMetadata'],
+    data() {
+        return {
+            store
+        }
+    },
     methods: {
         selectChat(chat) {
             this.$emit('chatSelected', chat.id)
