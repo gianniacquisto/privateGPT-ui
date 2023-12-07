@@ -144,7 +144,7 @@ export default {
   
 <style scoped>
 .chat-window {
-    width: 75%;
+    flex: content;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
     padding: 20px;
