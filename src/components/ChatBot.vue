@@ -109,7 +109,7 @@ export default {
                         activeChat.messages.push(botResponse)// push bot response
                     }
                     else {
-                        const newChat = { id: this.store.activeChatId, name: "new name", lastUpdated: "bla", messages: [userMessageObj, botResponse] }
+                        const newChat = { id: this.store.activeChatId, name: userMessageObj.content.substring(0, 20), lastUpdated: "bla", messages: [userMessageObj, botResponse] }
                         storeChats.push(newChat)
                     }
 
