@@ -1,28 +1,29 @@
 <template>
-    <div class="document-window">
+    <div class="toggle-btn-wrapper">
+        <button @click="toggleVisibility" class="caret-btn">
+            {{ isHidden ? '►' : '◄' }}
+        </button>
+    </div>
+    <div v-show="!isHidden" class="document-window">
         <div>
             <h3>Chats</h3>
         </div>
         <div v-for="chat in store.chats" @click="selectChat(chat)" class="document">
-            <div v-if="chat">
-                {{ chat.name }}
-            </div>
+            <div v-if="chat">{{ chat.name }}</div>
         </div>
         <div class="document-buttons">
             <button @click="newChatSwitch">New Chat</button>
-
         </div>
-
     </div>
 </template>
-  
 <script>
 import { store } from '../store';
 
 export default {
     data() {
         return {
-            store
+            store,
+            isHidden: false
         }
     },
     methods: {
@@ -34,12 +35,27 @@ export default {
             this.store.activeChatId = ""
             this.store.newChatSwitch = !this.store.newChatSwitch
 
+        },
+        toggleVisibility() {
+            this.isHidden = !this.isHidden;
         }
     }
 };
 </script>
-  
+
 <style scoped>
+.toggle-btn-wrapper {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.caret-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
 .document-window {
     width: 25%;
     padding: 10px;
