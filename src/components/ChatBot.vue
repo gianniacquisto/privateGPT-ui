@@ -7,7 +7,7 @@
         <br>
 
 
-        <div class="chat-bot" ref="chatBot" v-if="store.chats.length">
+        <div class="chat-bot" ref="chatBot" v-if="store.activeChatId && store.chats.length">
 
             <div v-for="message in storeActiveChat.messages" :class="{
                 'user-message': message.role === 'user',
@@ -59,6 +59,7 @@ export default {
         generateChatId() {
             const chatId = crypto.randomUUID()
             this.store.activeChatId = chatId
+            console.log("Generated chat id:", chatId);
         },
         toggleIncludeSources() {
             this.includeSources = !this.includeSources

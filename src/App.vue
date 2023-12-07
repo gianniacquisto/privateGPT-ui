@@ -6,7 +6,7 @@
     <br>
     <div class="content-container">
       <ChatHistory />
-      <ChatBot />
+      <ChatBot :key="store.newChatSwitch" />
       <DocumentList />
     </div>
   </div>

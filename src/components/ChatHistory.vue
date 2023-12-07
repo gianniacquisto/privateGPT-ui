@@ -2,8 +2,9 @@
     <div class="document-window">
         <div>
             <h3>Chats</h3>
+            <button @click="newChatSwitch">New Chat</button>
         </div>
-        <div v-for="chat in this.store.chats" @click="selectChat(chat)" class="document">
+        <div v-for="chat in store.chats" @click="selectChat(chat)" class="document">
             <div v-if="chat">
                 {{ chat.name }}
             </div>
@@ -24,6 +25,11 @@ export default {
         selectChat(chat) {
             this.$emit('chatSelected', chat.id)
             console.log(`Chat selected with id: ${chat.id}`);
+        },
+        newChatSwitch() {
+            this.store.activeChatId = ""
+            this.store.newChatSwitch = !this.store.newChatSwitch
+
         }
     }
 };
