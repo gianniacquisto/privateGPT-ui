@@ -7,8 +7,7 @@
         <br>
 
 
-        <div class="chat-bot" ref="chatBot" v-if="store.activeChatId && store.chats.length">
-
+        <div class="chat-bot" ref="chatBot" v-if="storeActiveChat">
             <div v-for="message in storeActiveChat.messages" :class="{
                 'user-message': message.role === 'user',
                 'bot-message': message.role === 'assistant'
