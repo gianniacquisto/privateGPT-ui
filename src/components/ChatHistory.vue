@@ -23,7 +23,7 @@ export default {
     },
     methods: {
         selectChat(chat) {
-            this.$emit('chatSelected', chat.id)
+            this.store.activeChatId = chat.id
             console.log(`Chat selected with id: ${chat.id}`);
         },
         newChatSwitch() {
