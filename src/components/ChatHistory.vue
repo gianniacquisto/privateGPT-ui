@@ -2,13 +2,17 @@
     <div class="document-window">
         <div>
             <h3>Chats</h3>
-            <button @click="newChatSwitch">New Chat</button>
         </div>
         <div v-for="chat in store.chats" @click="selectChat(chat)" class="document">
             <div v-if="chat">
                 {{ chat.name }}
             </div>
         </div>
+        <div class="document-buttons">
+            <button @click="newChatSwitch">New Chat</button>
+
+        </div>
+
     </div>
 </template>
   
@@ -54,5 +58,9 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.document-buttons {
+    margin-top: auto;
 }
 </style>
