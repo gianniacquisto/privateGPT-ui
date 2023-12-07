@@ -7,9 +7,9 @@
         <br>
 
 
-        <div class="chat-bot" ref="chatBot" v-if="activeChat">
+        <div class="chat-bot" ref="chatBot" v-if="store.chats.length">
 
-            <div v-for="message in activeChat.messages" :class="{
+            <div v-for="message in storeActiveChat.messages" :class="{
                 'user-message': message.role === 'user',
                 'bot-message': message.role === 'assistant'
             }">
@@ -22,7 +22,6 @@
                 </div>
             </div>
         </div>
-
 
 
         <div class="message-input">
@@ -52,20 +51,11 @@ export default {
         this.generateChatId()
     },
     computed: {
-        activeChat() {
-            console.log("bloop", this.store.chats)
-            const bla = this.store.chats.filter(x => {
-                console.log("x", x);
-                console.log("this.store.activeChatId", this.store.activeChatId);
-                return x.id === this.store.activeChatId
-            })
-            console.log("bla", bla);
-            if (bla) {
+        storeActiveChat() {
 
-                return bla[0]
-            }
-            else return {}
-        },
+            return this.store.chats.filter(x => x.id === this.store.activeChatId)[0]
+
+        }
     },
     methods: {
         generateChatId() {
@@ -82,14 +72,25 @@ export default {
         sendMessage() {
             const userMessage = this.newMessage;
             const userMessageObj = { role: "user", content: userMessage }
-            const messages = this.store.chats.filter(x => x.id === this.store.activeChatId).map(x => x.messages)
+            let activeChat = this.store.chats.filter(x => x.id === this.store.activeChatId)[0]
+            const activeChatHasMessages = activeChat ? activeChat.messages : false
+            console.log("activeChatHasMessages", activeChatHasMessages);
+            if (activeChatHasMessages) {
+                activeChat.messages.push(userMessageObj)
+            }
+            else {
+                activeChat = {
+                    id: this.store.activeChatId, name: "new chat", lastUpdated: Date.now().toString, messages: [userMessageObj]
+                }
+            }
             const postData = {
                 // context_filter: {doc_ids: ["docId1", "docId2"]}, TODO enable via button
                 include_sources: this.includeSources, // TODO show sources
-                messages: [...messages, userMessageObj],
+                messages: activeChat.messages,
                 stream: false, // TODO enable via button
                 use_context: this.useContext
             };
+            console.log("post data", postData);
 
             axios.post('http://localhost:8001/v1/chat/completions', postData, {
                 headers: {
@@ -100,7 +101,6 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     const botResponse = response.data.choices[0].message
-
                     const storeChats = this.store.chats
                     const storeChatIds = storeChats.map(x => x.id)
                     console.log("store chat ids: ", storeChatIds);
@@ -110,9 +110,12 @@ export default {
 
                     // Save message history here
                     if (currentChatExists) {
-                        const activeChat = storeChats.filter(x => { x.id === this.store.activeChatId })[0]
-                        activeChat.messages.push(userMessageObj)
-                        activeChat.messages.push(botResponse) // push bot response
+                        const activeChat = storeChats.filter(x => { x.id === this.store.activeChatId })
+                        console.log("active chat", activeChat);
+                        console.log("user message", userMessageObj);
+                        console.log("bot message", botResponse);
+                        activeChat.map(x => x.messages.push(userMessageObj))
+                        activeChat.map(x => x.messages.push(botResponse))// push bot response
                     }
                     else {
                         const newChat = { id: this.store.activeChatId, name: "new name", lastUpdated: "bla", messages: [userMessageObj, botResponse] }
@@ -122,22 +125,6 @@ export default {
 
                     this.newMessage = "" // Clear the input after sending
 
-
-                    // if (this.chatId === this.$props.modelValue?.id) {
-                    //     const updatedChat = this.$props.activeChat
-                    //     updatedChat.messages = this.messages
-                    //     this.$emit("update:modelValue", updatedChat)
-                    // }
-                    // else {
-                    //     const newChat = { id: this.chatId, name: "bla!", lastUpdated: "yep", messages: this.messages }
-                    //     console.log("newChat", newChat);
-                    //     this.$emit("update:modelValue", newChat)
-                    // }
-
-                    // this.activeChat = this.$props.activeChat
-                    // this.activeChat.messages = this.messages
-                    // console.log(this.activeChat);
-                    // this.$emit('update:activeChat', this.activeChat)//todo see if this should be computed
                     // -------------------------
                     this.$nextTick(() => {
                         this.scrollToBottom()
