@@ -48,6 +48,10 @@ button {
   transition: border-color 0.25s;
 }
 
+.toggle-component-button {
+  padding: 0.25em;
+}
+
 button:hover {
   border-color: #646cff;
 }

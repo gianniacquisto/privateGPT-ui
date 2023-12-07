@@ -1,9 +1,4 @@
 <template>
-    <div>
-        <button @click="toggleVisibility" class="caret-btn">
-            {{ store.chatIsHidden ? '►' : '◄' }}
-        </button>
-    </div>
     <div v-show="!this.store.chatIsHidden" class="document-window">
         <div>
             <h3>Chats</h3>
@@ -15,6 +10,9 @@
             <button @click="newChatSwitch">New Chat</button>
         </div>
     </div>
+    <button @click="toggleVisibility" class="toggle-component-button">
+        {{ store.chatIsHidden ? '►' : '◄' }}
+    </button>
 </template>
 <script>
 import { store } from '../store';
@@ -47,10 +45,6 @@ export default {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-}
-
-.caret-btn {
-    cursor: pointer;
 }
 
 .document-window {

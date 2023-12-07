@@ -43,7 +43,7 @@ export default {
 #app {
   display: flex;
   padding: 10px;
-  width: 95vw;
+  width: 100vw;
   flex-direction: column;
 }
 

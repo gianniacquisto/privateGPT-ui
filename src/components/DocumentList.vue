@@ -1,14 +1,15 @@
 <template>
-    <div class="document-window">
+    <button @click="toggleVisibility" class="toggle-component-button">
+        {{ store.documentListIsHidden ? '◄' : '►' }}
+    </button>
+    <div v-show="!this.store.documentListIsHidden" class="document-window">
         <div>
             <h3>Ingested Files</h3>
         </div>
 
-        <div class="document-list">
-            <div v-for="file in fileList" class="document">
-                {{ file }}
-                <button class="delete-icon" @click="deleteFile(file)">🗑️</button>
-            </div>
+        <div v-for="file in fileList" class="document">
+            {{ file }}
+            <button class="delete-icon" @click="deleteFile(file)">🗑️</button>
         </div>
         <br>
         <div class="document-buttons">
@@ -19,12 +20,13 @@
 </template>
   
 <script>
-
+import { store } from '../store';
 import axios from 'axios'
 
 export default {
     data() {
         return {
+            store,
             fileList: [],
             documentList: [],
         };
@@ -95,6 +97,9 @@ export default {
                     });
 
             }
+        },
+        toggleVisibility() {
+            this.store.documentListIsHidden = !this.store.documentListIsHidden;
         }
     },
 };

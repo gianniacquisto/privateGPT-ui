@@ -4,7 +4,8 @@ export const store = reactive({
     chats: [],
     activeChatId: "",
     newChatSwitch: false,
-    chatIsHidden: false
+    chatIsHidden: false,
+    documentListIsHidden: false
 })
 
 // Watch for changes in the store and update localStorage
