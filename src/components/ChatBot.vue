@@ -52,16 +52,13 @@ export default {
     },
     computed: {
         storeActiveChat() {
-
             return this.store.chats.filter(x => x.id === this.store.activeChatId)[0]
-
         }
     },
     methods: {
         generateChatId() {
             const chatId = crypto.randomUUID()
             this.store.activeChatId = chatId
-            console.log("Generated Chat Id: ", chatId)
         },
         toggleIncludeSources() {
             this.includeSources = !this.includeSources
@@ -74,7 +71,6 @@ export default {
             const userMessageObj = { role: "user", content: userMessage }
             let activeChat = this.store.chats.filter(x => x.id === this.store.activeChatId)[0]
             const activeChatHasMessages = activeChat ? activeChat.messages : false
-            console.log("activeChatHasMessages", activeChatHasMessages);
             if (activeChatHasMessages) {
                 activeChat.messages.push(userMessageObj)
             }
@@ -90,7 +86,6 @@ export default {
                 stream: false, // TODO enable via button
                 use_context: this.useContext
             };
-            console.log("post data", postData);
 
             axios.post('http://localhost:8001/v1/chat/completions', postData, {
                 headers: {
@@ -110,17 +105,12 @@ export default {
 
                     // Save message history here
                     if (currentChatExists) {
-                        const activeChat = storeChats.filter(x => { x.id === this.store.activeChatId })
-                        console.log("active chat", activeChat);
-                        console.log("user message", userMessageObj);
-                        console.log("bot message", botResponse);
-                        activeChat.map(x => x.messages.push(userMessageObj))
-                        activeChat.map(x => x.messages.push(botResponse))// push bot response
+                        const activeChat = storeChats.filter(x => x.id === this.store.activeChatId)[0]
+                        activeChat.messages.push(botResponse)// push bot response
                     }
                     else {
                         const newChat = { id: this.store.activeChatId, name: "new name", lastUpdated: "bla", messages: [userMessageObj, botResponse] }
                         storeChats.push(newChat)
-                        console.log("adding new chat", storeChats);
                     }
 
                     this.newMessage = "" // Clear the input after sending
