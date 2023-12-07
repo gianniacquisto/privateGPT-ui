@@ -76,7 +76,7 @@ export default {
             }
             else {
                 activeChat = {
-                    id: this.store.activeChatId, name: "new chat", lastUpdated: Date.now().toString, messages: [userMessageObj]
+                    id: this.store.activeChatId, name: "", lastUpdated: Date.now().toString, messages: [userMessageObj]
                 }
             }
             const postData = {
@@ -109,7 +109,7 @@ export default {
                         activeChat.messages.push(botResponse)// push bot response
                     }
                     else {
-                        const newChat = { id: this.store.activeChatId, name: userMessageObj.content.substring(0, 20), lastUpdated: Date.now().toString, messages: [userMessageObj, botResponse] }
+                        const newChat = { id: this.store.activeChatId, name: userMessageObj.content.substring(0, 30), lastUpdated: Date.now().toString, messages: [userMessageObj, botResponse] }
                         storeChats.push(newChat)
                     }
 

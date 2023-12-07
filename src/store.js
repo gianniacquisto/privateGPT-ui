@@ -3,7 +3,8 @@ import { reactive, watch } from 'vue'
 export const store = reactive({
     chats: [],
     activeChatId: "",
-    newChatSwitch: false
+    newChatSwitch: false,
+    chatIsHidden: false
 })
 
 // Watch for changes in the store and update localStorage

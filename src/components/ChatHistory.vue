@@ -1,10 +1,10 @@
 <template>
-    <div class="toggle-btn-wrapper">
+    <div>
         <button @click="toggleVisibility" class="caret-btn">
-            {{ isHidden ? '►' : '◄' }}
+            {{ store.chatIsHidden ? '►' : '◄' }}
         </button>
     </div>
-    <div v-show="!isHidden" class="document-window">
+    <div v-show="!this.store.chatIsHidden" class="document-window">
         <div>
             <h3>Chats</h3>
         </div>
@@ -22,8 +22,7 @@ import { store } from '../store';
 export default {
     data() {
         return {
-            store,
-            isHidden: false
+            store
         }
     },
     methods: {
@@ -37,7 +36,7 @@ export default {
 
         },
         toggleVisibility() {
-            this.isHidden = !this.isHidden;
+            this.store.chatIsHidden = !this.store.chatIsHidden;
         }
     }
 };
@@ -51,8 +50,6 @@ export default {
 }
 
 .caret-btn {
-    background: none;
-    border: none;
     cursor: pointer;
 }
 
