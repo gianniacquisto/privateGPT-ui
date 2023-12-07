@@ -27,7 +27,6 @@ export default {
             console.log(`Chat selected with id: ${chat.id}`);
         },
         newChatSwitch() {
-            // this.store.chats = [] // here lies the problem
             this.store.activeChatId = ""
             this.store.newChatSwitch = !this.store.newChatSwitch
 
