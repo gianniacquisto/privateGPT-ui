@@ -7,7 +7,8 @@
             <h3>Ingested Files</h3>
         </div>
 
-        <div v-for="file in fileList" class="document">
+        <div v-for="file in  fileList " :class="{ 'selected-file': isFileSelected(file), document: true }"
+            @click="toggleFileInContext(file)">
             {{ file }}
             <button class="delete-icon" @click="deleteFile(file)">🗑️</button>
         </div>
@@ -56,12 +57,12 @@ export default {
             this.$refs.fileInput.click();
         },
         addFile(event) {
-            const selectedFiles = event.target.files;
-            console.log('Selected files:', selectedFiles);
+            const filesToAdd = event.target.files;
+            console.log('Adding files:', filesToAdd);
 
             const formData = new FormData();
-            for (let i = 0; i < selectedFiles.length; i++) {
-                formData.append('file', selectedFiles[i]);
+            for (let i = 0; i < filesToAdd.length; i++) {
+                formData.append('file', filesToAdd[i]);
             }
             axios.post('http://localhost:8001/v1/ingest', formData, {
                 headers: {
@@ -76,6 +77,22 @@ export default {
                 .catch(error => {
                     console.error('Error uploading file:', error);
                 });
+        },
+        toggleFileInContext(file) {
+            if (this.store.selectedFiles.has(file)) {
+                // file is selected and we want to deselect
+                this.store.selectedFiles.delete(file)
+                console.log(`Removing file: ${file} from context`);
+                console.log(this.store.selectedFiles);
+            }
+            else {
+                this.store.selectedFiles.add(file)
+                console.log(`Adding file: ${file} to context`);
+                console.log(this.store.selectedFiles);
+            }
+        },
+        isFileSelected(file) {
+            return this.store.selectedFiles.has(file)
         },
         deleteFile(file) {
             const docsToDelete = this.documentList.filter((document) => document.doc_metadata.file_name == file)
@@ -122,12 +139,20 @@ export default {
     flex-direction: column;
 }
 
+
 .document {
     position: relative;
     margin-bottom: 10px;
     padding: 8px;
     border-radius: 5px;
     background-color: #e3e3e3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.selected-file {
+    background-color: #aaa9a9;
     display: flex;
     justify-content: space-between;
     align-items: center;

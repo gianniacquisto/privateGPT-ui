@@ -5,8 +5,6 @@
             <button @click="toggleUseContext" :class="{ 'active': useContext }">Use Context</button>
         </div>
         <br>
-
-
         <div class="chat-bot" ref="chatBot" v-if="storeActiveChat">
             <div v-for="message in storeActiveChat.messages" :class="{
                 'user-message': message.role === 'user',
@@ -52,6 +50,9 @@ export default {
     computed: {
         storeActiveChat() {
             return this.store.chats.filter(x => x.id === this.store.activeChatId)[0]
+        },
+        selectedDocuments(store) {
+            //  return the documents which have the file name the same as those in the "selectedFileName set"
         }
     },
     methods: {
