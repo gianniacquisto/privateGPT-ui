@@ -3,6 +3,7 @@ import { reactive, watch } from 'vue';
 // Create a reactive store
 export const store = reactive({
     chats: [],
+    ingestedDocuments: [],
     activeChatId: "",
     selectedFiles: new Set(),
     newChatSwitch: false,

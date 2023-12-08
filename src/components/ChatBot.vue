@@ -51,8 +51,10 @@ export default {
         storeActiveChat() {
             return this.store.chats.filter(x => x.id === this.store.activeChatId)[0]
         },
-        selectedDocuments(store) {
+        selectedDocuments() {
             //  return the documents which have the file name the same as those in the "selectedFileName set"
+
+            // return selectedDocumentIds
         }
     },
     methods: {
@@ -80,8 +82,13 @@ export default {
                     id: this.store.activeChatId, name: "", lastUpdated: Date.now().toString, messages: [userMessageObj]
                 }
             }
+            // const filteredArray = array1.filter(value => array2.includes(value));
+            const selectedDocumentIds = this.store.ingestedDocuments
+                .filter(doc => this.store.selectedFiles.has(doc.doc_metadata.file_name))
+                .map(doc => doc.doc_id)
+            console.log(selectedDocumentIds);
             const postData = {
-                // context_filter: {doc_ids: ["docId1", "docId2"]}, TODO enable via button
+                context_filter: { doc_ids: selectedDocumentIds }, // TODO enable via button
                 include_sources: this.includeSources, // TODO show sources
                 messages: activeChat.messages,
                 stream: false, // TODO enable via button

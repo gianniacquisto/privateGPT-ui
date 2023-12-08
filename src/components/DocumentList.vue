@@ -9,8 +9,10 @@
 
         <div v-for="file in  fileList " :class="{ 'selected-file': isFileSelected(file), document: true }"
             @click="toggleFileInContext(file)">
-            {{ file }}
-            <button class="delete-icon" @click="deleteFile(file)">🗑️</button>
+            <div>
+                {{ file }}
+                <button class="delete-icon" @click="deleteFile(file)">🗑️</button>
+            </div>
         </div>
         <br>
         <div class="document-buttons">
@@ -28,8 +30,7 @@ export default {
     data() {
         return {
             store,
-            fileList: [],
-            documentList: [],
+            fileList: []
         };
     },
     mounted() {
@@ -39,14 +40,10 @@ export default {
         fetchData() {
             axios.get('http://localhost:8001/v1/ingest/list')
                 .then(response => {
-                    const proxyDocumentList = new Proxy(response.data.data, {
-                        get(target, prop, receiver) {
-                            return Reflect.get(target, prop, receiver)
-                        },
-                    })
-                    this.documentList = proxyDocumentList
-                    console.log(proxyDocumentList);
-                    this.fileList = [...new Set(proxyDocumentList.map(x => x.doc_metadata.file_name))]
+                    this.store.ingestedDocuments = response.data.data
+                    console.log(this.store.ingestedDocuments);
+
+                    this.fileList = [...new Set(this.store.ingestedDocuments.map(x => x.doc_metadata.file_name))]
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
@@ -95,7 +92,7 @@ export default {
             return this.store.selectedFiles.has(file)
         },
         deleteFile(file) {
-            const docsToDelete = this.documentList.filter((document) => document.doc_metadata.file_name == file)
+            const docsToDelete = this.store.ingestedDocuments.filter((document) => document.doc_metadata.file_name == file)
             const docIdsToDelete = docsToDelete.map(x => x.doc_id)
             console.log("docIdsToDelete", docIdsToDelete);
             for (let i = 0; i < docIdsToDelete.length; i++) {
@@ -160,10 +157,12 @@ export default {
 
 .delete-icon {
     position: sticky;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     cursor: pointer;
-    color: #ca5252;
+    margin-left: ;
+
+    /* color: #ca5252; */
 }
 
 .document-buttons {
