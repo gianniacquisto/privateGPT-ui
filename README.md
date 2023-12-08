@@ -2,6 +2,7 @@
 
 A frontend for [imartinez/privateGPT](https://github.com/imartinez/privateGPT).
 
+![Example Frontend](src/assets/frontend-screenshot.png)
 Developed with Vite + Vue.
 
 To run the app in dev mode:
