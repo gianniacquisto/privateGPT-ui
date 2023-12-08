@@ -107,7 +107,7 @@ export default {
   
 <style scoped>
 .document-window {
-    width: 25%;
+    width: 15%;
     padding: 10px;
     overflow-y: auto;
     height: 70vh;
