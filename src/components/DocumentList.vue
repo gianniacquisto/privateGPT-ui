@@ -160,8 +160,6 @@ export default {
     padding-left: 10px;
     padding-right: 10px;
     cursor: pointer;
-    margin-left: ;
-
     /* color: #ca5252; */
 }
 
