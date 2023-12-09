@@ -19,8 +19,7 @@
                 </div>
             </div>
         </div>
-
-
+        <br>
         <div class="message-input">
             <input class="message-input-textbox" v-model="newMessage" @keyup.enter="sendMessage" />
             <button @click="sendMessage">Send Message</button>
@@ -50,11 +49,6 @@ export default {
     computed: {
         storeActiveChat() {
             return this.store.chats.filter(x => x.id === this.store.activeChatId)[0]
-        },
-        selectedDocuments() {
-            //  return the documents which have the file name the same as those in the "selectedFileName set"
-
-            // return selectedDocumentIds
         }
     },
     methods: {
@@ -72,6 +66,8 @@ export default {
         sendMessage() {
             const userMessage = this.newMessage;
             const userMessageObj = { role: "user", content: userMessage }
+            this.newMessage = ""
+
             let activeChat = this.store.chats.filter(x => x.id === this.store.activeChatId)[0]
             const activeChatHasMessages = activeChat ? activeChat.messages : false
             if (activeChatHasMessages) {
@@ -82,13 +78,12 @@ export default {
                     id: this.store.activeChatId, name: "", lastUpdated: Date.now().toString, messages: [userMessageObj]
                 }
             }
-            // const filteredArray = array1.filter(value => array2.includes(value));
             const selectedDocumentIds = this.store.ingestedDocuments
                 .filter(doc => this.store.selectedFiles.has(doc.doc_metadata.file_name))
                 .map(doc => doc.doc_id)
-            console.log(selectedDocumentIds);
+            console.log("Selected document context: ", selectedDocumentIds);
             const postData = {
-                context_filter: { doc_ids: selectedDocumentIds }, // TODO enable via button
+                context_filter: { docs_ids: selectedDocumentIds },
                 include_sources: this.includeSources, // TODO show sources
                 messages: activeChat.messages,
                 stream: false, // TODO enable via button
@@ -110,7 +105,6 @@ export default {
                     const currentChatExists = storeChatIds.includes(this.store.activeChatId)
                     console.log("current chat exists: ", currentChatExists);
 
-
                     // Save message history here
                     if (currentChatExists) {
                         const activeChat = storeChats.filter(x => x.id === this.store.activeChatId)[0]
@@ -121,9 +115,6 @@ export default {
                         storeChats.push(newChat)
                     }
 
-                    this.newMessage = "" // Clear the input after sending
-
-                    // -------------------------
                     this.$nextTick(() => {
                         this.scrollToBottom()
                     });
