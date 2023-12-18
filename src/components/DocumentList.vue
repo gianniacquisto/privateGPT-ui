@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         fetchData() {
-            axios.get(`http://${store.instanceIpPort}/v1/ingest/list`)
+            axios.get(`${store.instanceIpPort}/v1/ingest/list`)
                 .then(response => {
                     this.store.ingestedDocuments = response.data.data
                     console.log(this.store.ingestedDocuments);
@@ -61,7 +61,7 @@ export default {
                 const formData = new FormData();
                 formData.append('file', filesToAdd[i]);
 
-                axios.post(`http://${store.instanceIpPort}/v1/ingest`, formData, {
+                axios.post(`${store.instanceIpPort}/v1/ingest`, formData, {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'multipart/form-data',
@@ -98,7 +98,7 @@ export default {
             console.log("docIdsToDelete", docIdsToDelete);
             for (let i = 0; i < docIdsToDelete.length; i++) {
 
-                axios.delete(`http://${store.instanceIpPort}/v1/ingest/${docIdsToDelete[i]}`, {
+                axios.delete(`${store.instanceIpPort}/v1/ingest/${docIdsToDelete[i]}`, {
                     headers: {
                         'Accept': 'application/json',
                     },
