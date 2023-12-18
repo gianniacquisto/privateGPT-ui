@@ -90,7 +90,7 @@ export default {
                 use_context: this.useContext
             };
 
-            axios.post('http://localhost:8001/v1/chat/completions', postData, {
+            axios.post(`http://${store.instanceIpPort}/v1/chat/completions`, postData, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
