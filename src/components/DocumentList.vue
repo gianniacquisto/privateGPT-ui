@@ -7,7 +7,7 @@
             <h3>Ingested Files</h3>
         </div>
 
-        <div v-for="file in  fileList " :class="{ 'selected-file': isFileSelected(file), document: true }"
+        <div v-for="file in fileList" :class="{ 'selected-file': isFileSelected(file), document: true }"
             @click="toggleFileInContext(file)">
             <div>
                 {{ file }}
@@ -57,23 +57,24 @@ export default {
             const filesToAdd = event.target.files;
             console.log('Adding files:', filesToAdd);
 
-            const formData = new FormData();
             for (let i = 0; i < filesToAdd.length; i++) {
+                const formData = new FormData();
                 formData.append('file', filesToAdd[i]);
-            }
-            axios.post(`http://${store.instanceIpPort}/v1/ingest`, formData, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-                .then(response => {
-                    console.log("posting formdata", response.data);
-                    this.fetchData()
+
+                axios.post(`http://${store.instanceIpPort}/v1/ingest`, formData, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                    },
                 })
-                .catch(error => {
-                    console.error('Error uploading file:', error);
-                });
+                    .then(response => {
+                        console.log("posting formdata", response.data);
+                        this.fetchData()
+                    })
+                    .catch(error => {
+                        console.error('Error uploading file:', error);
+                    });
+            }
         },
         toggleFileInContext(file) {
             if (this.store.selectedFiles.has(file)) {
