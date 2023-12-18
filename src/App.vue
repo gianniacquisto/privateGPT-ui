@@ -2,6 +2,8 @@
   <div id="app">
     <div class="title-banner">
       <h1>Private GPT</h1>
+      <input v-model="store.instanceIpPort" />
+
     </div>
     <br>
     <div class="content-container">

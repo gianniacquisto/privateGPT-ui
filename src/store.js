@@ -8,7 +8,8 @@ export const store = reactive({
     selectedFiles: new Set(),
     newChatSwitch: false,
     chatIsHidden: false,
-    documentListIsHidden: false
+    documentListIsHidden: false,
+    instanceIpPort: "localhost:8001"
 });
 
 // Watch for changes in the store and update localStorage
