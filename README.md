@@ -11,3 +11,7 @@ To run the app in dev mode:
  - run `npm run dev`
 
  NB: ensure you have node+npm installed
+
+ To see a deployed version of the UI that can connect to a privateGPT instance available on your network use:
+
+https://gianniacquisto.github.io/privateGPT-ui/
