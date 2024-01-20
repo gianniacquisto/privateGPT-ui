@@ -15,3 +15,6 @@ To run the app in dev mode:
  To see a deployed version of the UI that can connect to a privateGPT instance available on your network use:
 
 https://gianniacquisto.github.io/privateGPT-ui/
+
+Common Issues:
+If you are seeing CORS errors make sure you have enabled CORS in your privateGPT deployment settings.
